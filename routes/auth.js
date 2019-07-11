@@ -4,62 +4,90 @@ const authRoutes = express.Router();
 const User = require("../models/User");
 
 // Bcrypt to encrypt passwords
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const bcryptSalt = 10;
 
-
-authRoutes.get("/login", (req, res, next) => {
-  res.render("auth/login", { "message": req.flash("error") });
+const logInPromise = (user, req) => new Promise((resolve,reject) => {
+  req.login(user, (err) => {
+      if (err) return reject('Something went wrong');
+      resolve(user);
+    });
 });
 
-authRoutes.post("/login", passport.authenticate("local", {
-  successRedirect: "/",
-  failureRedirect: "/auth/login",
-  failureFlash: true,
-  passReqToCallback: true
-}));
+authRoutes.post('/login', (req, res, next) => {
+  const username = req.body.email;
+  const { password } = req.body;
 
-authRoutes.get("/signup", (req, res, next) => {
-  res.render("auth/signup");
+  if (!username || !password) {
+    res.status(400).json({ message: 'Provide username and password' });
+    return;
+  }
+
+  User.findOne({ username })
+  .then( user => {
+      if(!user) throw new Error('The username does not exist');
+      if(!bcrypt.compareSync(password, user.password)) throw new Error('The password is not correct');
+      return logInPromise(user,req);    
+  })
+  .then(user => res.status(200).json(user))
+  .catch(e => res.status(500).json({message:e.message}));
+
 });
 
 authRoutes.post("/signup", (req, res, next) => {
-  const username = req.body.username;
-  const password = req.body.password;
-  const rol = req.body.role;
+  const username  = req.body.email;
+  const { password, role, name, lastName } = req.body;
   if (username === "" || password === "") {
-    res.render("auth/signup", { message: "Indicate username and password" });
+    res.send({status: 402, message: "Indicate username and password" });
     return;
   }
 
   User.findOne({ username }, "username", (err, user) => {
     if (user !== null) {
-      res.render("auth/signup", { message: "The username already exists" });
+      res.send({status: 402, message: "The username already exists" });
       return;
     }
 
     const salt = bcrypt.genSaltSync(bcryptSalt);
     const hashPass = bcrypt.hashSync(password, salt);
+    const newUser = { username, password: hashPass, role, name, lastName };
 
-    const newUser = new User({
-      username,
-      password: hashPass,
-      role:"teacher"
-    });
-
-    newUser.save((err) => {
-      if (err) {
-        res.render("auth/signup", { message: "Something went wrong" });
-      } else {
-        res.redirect("/");
-      }
+    User.create(newUser)
+    .then(user => {
+      req.login(user, (err, newUser) => {
+        res.send({status: 200, data: user});
+      })
+    })
+    .catch(err => {
+      console.log(err)
+      res.send({status: 500, message: "Error en el servidor"});
     });
   });
 });
 
-authRoutes.get("/logout", (req, res) => {
-  req.logout();
-  res.redirect("/");
+authRoutes.get('/loggedin', (req, res) => {
+  if(req.user){
+      return res.status(200).json(req.user);
+  }else{
+      return res.status(400).json({message:"You should loggin first"});
+  }
+});
+
+authRoutes.get('/logout', (req, res) => {
+  if(req.user){
+      req.logout();
+      return res.status(200).json({message:"User logged out"});
+  }else{
+      return res.status(400).json({message:"You should loggin first"});
+  }
 });
 
 module.exports = authRoutes;
+
+  
+
+
+
+
+
+

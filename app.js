@@ -16,7 +16,7 @@ const flash      = require("connect-flash");
 
 mongoose.Promise = Promise;
 mongoose
-  .connect('mongodb://localhost/acompartir-server', {useMongoClient: true})
+  .connect(process.env.MONGODB_URI, {useMongoClient: true})
   .then(() => {
     console.log('Connected to Mongo!')
   }).catch(err => {
@@ -59,14 +59,10 @@ hbs.registerHelper('ifUndefined', (value, options) => {
   }
 });
   
+app.locals.title = 'acompartir';
 
-// default value for title local
-app.locals.title = 'Express - Generated with IronGenerator';
-
-
-// Enable authentication using session + passport
 app.use(session({
-  secret: 'irongenerator',
+  secret: 'acompartir',
   resave: true,
   saveUninitialized: true,
   store: new MongoStore( { mongooseConnection: mongoose.connection })
@@ -75,11 +71,21 @@ app.use(flash());
 require('./passport')(app);
     
 
+/*
+ROUTES IMPORT
+*/
+
 const index = require('./routes/index');
-app.use('/', index);
+app.use('/api', index);
 
 const authRoutes = require('./routes/auth');
-app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
+
+const categoryRoutes = require('./routes/category');
+app.use('/api/category', categoryRoutes);
+
+const productRoutes = require('./routes/product');
+app.use('/api/product', productRoutes);
       
 
 module.exports = app;
