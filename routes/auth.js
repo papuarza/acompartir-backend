@@ -15,8 +15,7 @@ const logInPromise = (user, req) => new Promise((resolve,reject) => {
 });
 
 authRoutes.post('/login', (req, res, next) => {
-  const username = req.body.email;
-  const { password } = req.body;
+  const { username, password } = req.body;
 
   if (!username || !password) {
     res.status(400).json({ message: 'Provide username and password' });

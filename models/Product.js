@@ -25,7 +25,8 @@ const productSchema = new Schema({
   showCompany: Boolean, //mostrar o no compañía donante
   demandaAlta: Boolean, //alta demanda del producto
   peso: Number, //peso de la caja o palet
-  boxPalets: Number //cantidad de cajas o palets por palet
+  boxPalets: Number, //cantidad de cajas o palets por palet
+  mostrar: {type: Boolean, default: false} //mostrar o no el producto
 }, {
   timestamps: {
     createdAt: 'created_at',

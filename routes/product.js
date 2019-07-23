@@ -34,7 +34,7 @@ router.post('/', (req, res, next) => {
     demandaAlta, 
     peso, 
     boxPalets,
-  } = req.body;
+  } = req.body.product;
   const totalCantidad = packCantidad * unidadPackCantidad;
   const precioAcompartir = precioOriginal * (porcentajeAcompartir/100);
   const nuevoProducto = {
@@ -78,8 +78,8 @@ router.put('/:ref', (req, res, next) => {
     .catch(error => res.send( { status: 500, error }))
 });
 
-router.delete('/:id', (req, res, next) => {
-  Product.findOneAndRemove({ _id: req.params.id })
+router.delete('/:ref', (req, res, next) => {
+  Product.findOneAndRemove({ ref: req.params.ref })
     .then(product => res.send({ status: 200, data: 'Ha sido eliminado correctamente' }))
     .catch(error => res.send( { status: 500, error }))
 });
