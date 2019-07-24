@@ -63,7 +63,7 @@ router.post('/', (req, res, next) => {
   .limit(1)
   .lean()
   .exec((err, model) => { 
-    let newRef = model[0].ref + 1;
+    let newRef = model[0].ref + 1 || 1;
     nuevoProducto['ref'] = newRef;
     Product.create(nuevoProducto)
     .then(product => res.send({ status: 200, data: product }))
