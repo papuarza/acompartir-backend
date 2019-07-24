@@ -30,15 +30,19 @@ mongoose
         var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
         callback(null, originIsWhitelisted);
     },
-    methods: ['GET', 'PUT', 'POST', 'DELETE'],
     credentials: true
 };
 
 
-  const app_name = require('./package.json').name;
-  const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.')[0]}`);
+const app_name = require('./package.json').name;
+const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.')[0]}`);
   
-  const app = express();
+const app = express();
+
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Headers', 'content-Type,x-requested-with');
+  next();
+});
   
   // Middleware Setup
 app.use(cors(corsOptions));
