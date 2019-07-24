@@ -30,6 +30,7 @@ mongoose
         var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
         callback(null, originIsWhitelisted);
     },
+    methods: ['GET', 'PUT', 'POST', 'DELETE'],
     credentials: true
 };
 
