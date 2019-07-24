@@ -34,7 +34,7 @@ router.post('/', (req, res, next) => {
     demandaAlta, 
     peso, 
     boxPalets,
-  } = req.body.product;
+  } = req.body;
   const totalCantidad = packCantidad * unidadPackCantidad;
   const precioAcompartir = precioOriginal * (porcentajeAcompartir/100);
   const nuevoProducto = {
