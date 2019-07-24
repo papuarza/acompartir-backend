@@ -40,6 +40,7 @@ const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.
 const app = express();
 
 app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
   res.header('Access-Control-Allow-Headers', 'content-Type,x-requested-with');
   next();
 });
