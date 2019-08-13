@@ -3,29 +3,45 @@ const Schema   = mongoose.Schema;
 
 const entitySchema = new Schema({
   cif: String,
-  type: {
+  tipo: {
     type: String,
     default: 'ONG',
     enum: ['ONG', 'Economatos']
   },
-  name: String,
-  fecha_constitución: Date,
+  direccion: {
+    principal: String,
+    ciudad: String,
+    provincia: String,
+    codigoPostal: String,
+  },
+  telefono: String,
+  movil: String,
+  email: String,
+  web: String,
+  comentarios: String,
+  personaContacto: String,
+  razonSocial: String,
+  fechaConstitución: Date,
   voluntarios: Number,
   empleados: Number,
-  personas_atendidas: Number,
-  actividad_centro: {
+  personasAtendidas: Number,
+  actividadCentro: {
     type: String
   },
-  colections: [{
+  colectivos: [{
     type: String
   }],
-  numero_registro: 'String',
+  numeroRegistro: 'String',
   direcciones_envio: [],
   direcciones_facturacion: [],
   documentos: {
 	  estatutos: { url: String, fecha: Date},
 	  memorias: { url: String, fecha: Date},
 	  ficha: { url: String, fecha: Date}
+  },
+  active: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: {
