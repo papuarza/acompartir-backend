@@ -52,6 +52,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use(session({
+  secret: "our-passport-local-strategy-app",
+  resave: true,
+  saveUninitialized: true,
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 24 * 60 * 60 // 1 day
+  })
+}));
+
 // Express View engine setup
 
 app.use(require('node-sass-middleware')({
@@ -78,6 +88,11 @@ hbs.registerHelper('ifUndefined', (value, options) => {
 });
   
 app.locals.title = 'acompartir';
+app.locals.datos = {
+  personasAyudadas: 600000,
+  toneladas: 900,
+  ongs: 300
+}
 
 app.use(session({
   secret: 'acompartir',
@@ -87,12 +102,19 @@ app.use(session({
 }))
 app.use(flash());
 require('./passport')(app);
+
+app.get('/api', (req, res, next) => {
+  res.send({status: 200, data: app.locals.datos});
+});
+
+app.post('/api', (req, res, next) => {
+  const {personasAyudadas, toneladas, ongs} = req.body.data;
+  app.locals.datos = {
+    personasAyudadas, toneladas, ongs
+  }
+  res.send({status: 200, data: app.locals.datos});
+});
     
-
-/*
-ROUTES IMPORT
-*/
-
 const index = require('./routes/index');
 app.use('/api', index);
 
@@ -104,6 +126,18 @@ app.use('/api/category', categoryRoutes);
 
 const productRoutes = require('./routes/product');
 app.use('/api/product', productRoutes);
+
+const cartRoutes = require('./routes/cart');
+app.use('/api/cart', cartRoutes);
+
+const entityRoutes = require('./routes/entity');
+app.use('/api/entity', entityRoutes);
+
+const companyRoutes = require('./routes/company');
+app.use('/api/company', companyRoutes);
+
+const donacionRoutes = require('./routes/donacion');
+app.use('/api/donacion', donacionRoutes);
       
 
 module.exports = app;

@@ -3,6 +3,8 @@ const Schema   = mongoose.Schema;
 
 const entitySchema = new Schema({
   cif: String,
+  ref: Number,
+  nombre: String,
   tipo: {
     type: String,
     default: 'ONG',
@@ -14,6 +16,10 @@ const entitySchema = new Schema({
     provincia: String,
     codigoPostal: String,
   },
+  logo: {
+    type: String,
+    default: 'http://www.14riverside.com/wp-content/uploads/2015/12/placeholder-company.png'
+  },
   telefono: String,
   movil: String,
   email: String,
@@ -21,7 +27,7 @@ const entitySchema = new Schema({
   comentarios: String,
   personaContacto: String,
   razonSocial: String,
-  fechaConstitución: Date,
+  fechaConstitucion: {type: Date},
   voluntarios: Number,
   empleados: Number,
   personasAtendidas: Number,
@@ -32,8 +38,21 @@ const entitySchema = new Schema({
     type: String
   }],
   numeroRegistro: 'String',
-  direcciones_envio: [],
-  direcciones_facturacion: [],
+  direcciones_envio: [
+    {
+        principal: String,
+        ciudad: String,
+        provincia: String,
+        codigoPostal: String,
+    }
+  ],
+  direccion_facturacion:
+    {
+        principal: String,
+        ciudad: String,
+        provincia: String,
+        codigoPostal: String,
+    },
   documentos: {
 	  estatutos: { url: String, fecha: Date},
 	  memorias: { url: String, fecha: Date},
@@ -41,7 +60,15 @@ const entitySchema = new Schema({
   },
   active: {
     type: Boolean,
-    default: false
+    default: true
+  },
+  newsletter: {
+    type: Boolean,
+    default: true
+  },
+  firtsTime: {
+    type: Boolean,
+    default: true
   }
 }, {
   timestamps: {

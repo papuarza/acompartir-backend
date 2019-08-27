@@ -13,6 +13,11 @@ const admins = [
     username: 'leticia',
     password: 'acompartir2019!',
     role: 'owner',
+  },
+  {
+    username: 'papu',
+    password: 'papu',
+    role: 'client'
   }
 ]
 

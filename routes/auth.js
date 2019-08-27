@@ -23,6 +23,7 @@ authRoutes.post('/login', (req, res, next) => {
   }
 
   User.findOne({ username })
+  .populate('entity')
   .then( user => {
       if(!user) throw new Error('The username does not exist');
       if(!bcrypt.compareSync(password, user.password)) throw new Error('The password is not correct');
@@ -58,7 +59,6 @@ authRoutes.post("/signup", (req, res, next) => {
       })
     })
     .catch(err => {
-      console.log(err)
       res.send({status: 500, message: "Error en el servidor"});
     });
   });
@@ -66,7 +66,12 @@ authRoutes.post("/signup", (req, res, next) => {
 
 authRoutes.get('/loggedin', (req, res) => {
   if(req.user){
-      return res.status(200).json(req.user);
+    User.findOne({ username: req.user.username })
+    .populate('entity')
+    .then(user => {
+      return res.status(200).json(user);
+    })
+    .catch(e => res.status(500).json({message:e.message}));   
   }else{
       return res.status(400).json({message:"You should loggin first"});
   }
