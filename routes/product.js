@@ -11,7 +11,6 @@ router.get('/', (req, res, next) => {
 
 router.get('/:ref', (req, res, next) => {
   Product.findOne({ref: req.params.ref})
-  .populate('categoria')
     .then(product => {
       res.send({ status: 200, data: product })
     })

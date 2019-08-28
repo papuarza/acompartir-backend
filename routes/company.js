@@ -1,4 +1,5 @@
 const express = require('express');
+const uploadCloud = require('../config/cloudinary.js');
 const router  = express.Router();
 const Company = require('../models/Company.js');
 
@@ -9,8 +10,9 @@ router.get('/', (req, res, next) => {
 });
 
 
-router.post('/', (req, res, next) => {
-  const { photo, name } = req.body;
+router.post('/', uploadCloud.single('file'), (req, res, next) => {
+  const { name } = req.body;
+  const photo = req.file.url;
   const newCompany = {photo, name}
   Company.create(newCompany)
   .then(company => {

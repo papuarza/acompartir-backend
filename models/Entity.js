@@ -18,7 +18,7 @@ const entitySchema = new Schema({
   },
   logo: {
     type: String,
-    default: 'http://www.14riverside.com/wp-content/uploads/2015/12/placeholder-company.png'
+    default: 'assets/images/team.svg'
   },
   telefono: String,
   movil: String,
@@ -28,9 +28,11 @@ const entitySchema = new Schema({
   personaContacto: String,
   razonSocial: String,
   fechaConstitucion: {type: Date},
+  fechaAlta: {type: String},
   voluntarios: Number,
   empleados: Number,
-  personasAtendidas: Number,
+  beneficiarios: String,
+  beneficiariosTotales: String,
   actividadCentro: {
     type: String
   },
