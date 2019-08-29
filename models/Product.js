@@ -6,7 +6,7 @@ const productSchema = new Schema({
   titulo: String, //titulo del producto
   foto: {
     type: String,
-    default: ['../../assets/images/product/default.svg']
+    default: ['https://res.cloudinary.com/acompartirapp/image/upload/v1567091138/images/product/default_jgxej7.svg']
   }, //imagen del producto
   descripcionCorta: String, //descripción corta del producto
   descripcion: String, //descripción larga del producto
