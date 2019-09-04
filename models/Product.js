@@ -11,8 +11,8 @@ const productSchema = new Schema({
   descripcionCorta: String, //descripción corta del producto
   descripcion: String, //descripción larga del producto
   categoria: { type: String, enum: ['Higiene', 'Limpieza', 'Hogar', 'Electrodomésticos', 'Bebés', 'Ropa', 'Material Escolar', 'Oficina', 'Otros']}, //categoría del producto
-  subCategoria: String, //subcategoría del producto
   cajasPorPalet: Number,
+  presentacion: {type: String, enum: ['Caja', 'Palet']},
   stock: Number,
   unidadesPorCaja: Number,
   totalCantidad: {type: Number, default: 1}, //cantidad total del producto. Multiplicación de los últimos 2 campos

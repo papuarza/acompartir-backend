@@ -356,7 +356,6 @@ entitiesInfo = entities.map(entity => {
     comentarios: entity.comentarios,
     colectivos,
     personaContacto: entity.personaContacto,
-    razonSocial: entity.razonSocial,
     fechaAlta: entity.fechaAlta,
     voluntarios: entity.voluntarios,
     empleados: entity.empleados,

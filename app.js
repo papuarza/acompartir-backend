@@ -138,6 +138,9 @@ app.use('/api/company', companyRoutes);
 
 const donacionRoutes = require('./routes/donacion');
 app.use('/api/donacion', donacionRoutes);
+
+const mailRoutes = require('./routes/mail');
+app.use('/api/mail', mailRoutes);
       
 
 module.exports = app;

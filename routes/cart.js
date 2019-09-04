@@ -92,7 +92,6 @@ router.post('/remove', (req, res, next) => {
   })
   .lean()
   .exec((error, cart) => {
-    console.log(cart)
     res.send({status: 200, data: cart})
   })
 });
@@ -102,6 +101,7 @@ router.put('/', (req, res, next) => {
   .populate('user')
   .populate({path: 'products.product'})
     .then(cart => {
+      
       res.send({ status: 200, data: cart })
     })
     .catch(error => res.send( { status: 500, error }))

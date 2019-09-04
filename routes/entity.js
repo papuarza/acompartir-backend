@@ -33,12 +33,12 @@ router.post('/', (req, res, next) => {
     razonSocial,
     voluntarios,
     empleados,
-    personasAtendidas,
+    beneficiarios,
+    beneficiariosTotales,
     actividadCentro,
-    numeroRegistro
+    numeroRegistro,
+    colectivos
   } = req.body.entity;
-  const fechaConstitucion = new Date(req.body.entity.fechaConstitucion);
-  const colectivos = req.body.entity.colectivos.trim().split(",");
   const direccion = {
     principal: req.body.entity.principal,
     ciudad: req.body.entity.ciudad,
@@ -56,10 +56,10 @@ router.post('/', (req, res, next) => {
     personaContacto,
     razonSocial,
     colectivos,
-    fechaConstitucion,
     voluntarios,
     empleados,
-    personasAtendidas,
+    beneficiarios,
+    beneficiariosTotales,
     actividadCentro,
     numeroRegistro,
     direccion,
@@ -89,7 +89,7 @@ router.post('/', (req, res, next) => {
     User.create(newUser)
     .then(user => {
       Entity.find()
-      .sort({ _id: -1 })
+      .sort({ ref: -1 })
       .limit(1)
       .lean()
       .exec((err, model) => { 
