@@ -39,7 +39,8 @@ router.post('/', (req, res, next) => {
     porcentajeAcompartir, 
     company, 
     pesoPorCaja, 
-    cajasPorPalet
+    cajasPorPalet,
+    showCompany
   } = req.body.product;
   const totalCantidad = stock * unidadesPorCaja;
   const precioOriginalTotal = precioOriginal * unidadesPorCaja;
@@ -61,7 +62,8 @@ router.post('/', (req, res, next) => {
     precioOriginalTotal,
     company,
     pesoPorCaja, 
-    cajasPorPalet
+    cajasPorPalet,
+    showCompany
   }
   Product.find()
   .sort({ _id: -1 })
@@ -96,6 +98,7 @@ router.put('/:ref', (req, res, next) => {
     company, 
     pesoPorCaja, 
     cajasPorPalet,
+    showCompany,
   } = req.body.product;
   const totalCantidad = stock * unidadesPorCaja;
   const precioOriginalTotal = precioOriginal * unidadesPorCaja;
@@ -117,7 +120,8 @@ router.put('/:ref', (req, res, next) => {
     precioOriginalTotal,
     company,
     pesoPorCaja, 
-    cajasPorPalet
+    cajasPorPalet,
+    showCompany
   }
   Product.findOneAndUpdate({ ref: req.params.ref }, nuevoProducto, { new: true })
     .then(product => res.send({ status: 200, data: product }))

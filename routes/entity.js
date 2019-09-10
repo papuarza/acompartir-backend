@@ -115,10 +115,68 @@ router.post('/', (req, res, next) => {
   
 });
 
-router.put('/:id', (req, res, next) => {
-  Entity.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
-    .then(entity => res.send({ status: 200, data: entity }))
-    .catch(error => res.send( { status: 500, error }))
+router.put('/:ref', (req, res, next) => {
+  const {
+    nombre,
+    cif,
+    telefono,
+    movil,
+    email,
+    web,
+    comentarios,
+    personaContacto,
+    razonSocial,
+    voluntarios,
+    empleados,
+    beneficiarios,
+    beneficiariosTotales,
+    actividadCentro,
+    numeroRegistro,
+    colectivos
+  } = req.body.entity;
+  const direccion = {
+    principal: req.body.entity.principal,
+    ciudad: req.body.entity.ciudad,
+    provincia: req.body.entity.provincia,
+    codigoPostal: req.body.entity.codigoPostal
+  }
+  const nuevaEntidad = {
+    nombre,
+    cif,
+    telefono,
+    movil,
+    email,
+    web,
+    comentarios,
+    personaContacto,
+    razonSocial,
+    colectivos,
+    voluntarios,
+    empleados,
+    beneficiarios,
+    beneficiariosTotales,
+    actividadCentro,
+    numeroRegistro,
+    direccion,
+    direccion_facturacion: direccion,
+    direcciones_envio: [direccion]
+  }
+  Entity.findOne({ ref: req.params.ref })
+  .then(entity => {
+    if(entity.email !== nuevaEntidad.email) {
+      User.findOneAndUpdate({entity: entity._id}, {username: nuevaEntidad.email}, {new: true})
+      .then(updatedUser => {
+        Entity.findOneAndUpdate({ ref: req.params.ref }, nuevaEntidad, { new: true })
+          .then(updatedEntity => res.send({ status: 200, data: updatedEntity }))
+          .catch(error => res.send( { status: 500, error }))
+      })
+    } else {
+      Entity.findOneAndUpdate({ ref: req.params.ref }, nuevaEntidad, { new: true })
+          .then(updatedEntity => res.send({ status: 200, data: updatedEntity }))
+          .catch(error => res.send( { status: 500, error }))
+    }
+  })
+  
 });
 
 router.put('/toggle/:ref', (req, res, next) => {

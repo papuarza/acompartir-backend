@@ -7,13 +7,33 @@ const Cart = require('../models/Cart.js');
 
 router.get('/', (req, res, next) => {
   Cart.find()
-    .then(carts => res.send({ status: 200, data: carts }))
+  .populate({
+    path: 'user', 
+    populate: { path: 'entity' }
+  })
+  .populate({path: 'products.product'})
+    .then(carts => {
+      res.send({ status: 200, data: carts })
+    })
     .catch(error => res.send( { status: 500, error }))
 });
 
 router.get('/user', (req, res, next) => {
   Cart.findOne({user: req.user._id})
   .populate('user')
+  .populate({path: 'products.product'})
+    .then(cart => {
+      res.send({ status: 200, data: cart })
+    })
+    .catch(error => res.send( { status: 500, error }))
+});
+
+router.get('/:id', (req, res, next) => {
+  Cart.findOne({_id: req.params.id})
+  .populate({
+    path: 'user', 
+    populate: { path: 'entity' }
+  })
   .populate({path: 'products.product'})
     .then(cart => {
       res.send({ status: 200, data: cart })
