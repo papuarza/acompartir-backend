@@ -1,5 +1,6 @@
 require('dotenv').config();
 const sgMail = require('@sendgrid/mail');
+const template = require('../templates/welcome.js');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 sendEmail = (to, from, subject, data) => {
@@ -32,5 +33,16 @@ sendConsulta = (to, from, subject, data) => {
   return sgMail.send(msg);
 }
 
+sendWelcomeEmail = (from, subject, data) => {
+  console.log(from, subject, data)
+  const msg = {
+    to: data.to,
+    from,
+    subject,
+    html: template.emailingTemplate(data.personaContacto, data.to),
+  };
+  return sgMail.send(msg);
+}
 
-module.exports = {sendEmail, sendConsulta};
+
+module.exports = {sendEmail, sendConsulta, sendWelcomeEmail};

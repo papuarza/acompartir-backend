@@ -12,7 +12,8 @@ const userSchema = new Schema({
   lastName: String,
   phone: String,
   birthdate: Date,
-  entity: { type: Schema.Types.ObjectId, ref: 'Entity'}
+  entity: { type: Schema.Types.ObjectId, ref: 'Entity'},
+  first_time: {type: Boolean, default: true}
 }, {
   timestamps: {
     createdAt: 'created_at',

@@ -127,4 +127,15 @@ router.put('/', (req, res, next) => {
     .catch(error => res.send( { status: 500, error }))
 });
 
+router.put('/extra', (req, res, next) => {
+  const { personasBeneficiadas, colectivos, consumoPropio, reparto } = req.body.data;
+  Cart.findOneAndUpdate({user: req.user._id}, {personasBeneficiadas, colectivos, consumoPropio, reparto}, {new:true})
+  .populate('user')
+  .populate({path: 'products.product'})
+    .then(cart => {
+      res.send({ status: 200, data: cart })
+    })
+    .catch(error => res.send( { status: 500, error }))
+});
+
 module.exports = router;

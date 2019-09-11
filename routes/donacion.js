@@ -10,8 +10,8 @@ router.get('/', (req, res, next) => {
 
 
 router.post('/', (req, res, next) => {
-  const { nombre, apellido, movil, email, monto, entidad } = req.body.donation;
-  const newDonacion = { nombre, apellido, movil, email, monto, entidad }
+  const { nombre, apellido, movil, email, monto, colectivo } = req.body.donation;
+  const newDonacion = { nombre, apellido, movil, email, monto, colectivo }
   Donacion.create(newDonacion)
   .then(donacion => {
     res.status(200).json(donacion)

@@ -1,9 +1,12 @@
+require('dotenv').config();
 const express = require('express');
+const uploadCloud = require('../config/cloudinary.js');
 const router  = express.Router();
 const Entity = require('../models/Entity.js');
 const User = require('../models/User.js');
 const bcrypt = require("bcryptjs");
 const bcryptSalt = 10;
+const sendGrid = require('../config/sendgrid');
 
 
 router.get('/', (req, res, next) => {
@@ -85,7 +88,6 @@ router.post('/', (req, res, next) => {
     const salt = bcrypt.genSaltSync(bcryptSalt);
     const hashPass = bcrypt.hashSync(password, salt);
     const newUser = { username, password: hashPass, role, name };
-
     User.create(newUser)
     .then(user => {
       Entity.find()
@@ -100,7 +102,13 @@ router.post('/', (req, res, next) => {
         .then(entidad => {
           User.findByIdAndUpdate(user._id, {entity: entidad._id})
           .then(userUpdated => {
-            res.send({ status: 200, data: entidad })
+            const data = { to: entidad.email, personaContacto: entidad.personaContacto}
+            const subject = 'Bienvenido a Acompartir';
+            
+            sendGrid.sendWelcomeEmail(process.env.FROM_EMAIL, subject, data)
+            .then(response => {
+              res.send({ status: 200, data: entidad })
+            })
           })
         })
         .catch(error => res.send( { status: 500, error }))
@@ -109,10 +117,7 @@ router.post('/', (req, res, next) => {
     .catch(err => {
       res.send({status: 500, message: "Error en el servidor"});
     });
-  });
-
-
-  
+  }); 
 });
 
 router.put('/:ref', (req, res, next) => {
@@ -192,6 +197,16 @@ router.delete('/:ref', (req, res, next) => {
   Entity.findOneAndRemove({ ref: req.params.ref })
     .then(product => res.send({ status: 200, data: 'Ha sido eliminado correctamente' }))
     .catch(error => res.send( { status: 500, error }))
+});
+
+router.post('/foto', uploadCloud.single('file'), (req, res, next) => {
+  Entity.findOneAndUpdate({ref: req.body.ref}, {logo: req.file.url}, {new: true})
+  .then(entity => {
+    res.status(200).json(entity)
+  })
+  .catch(error => {
+    res.status(500).json(error)
+  })
 });
 
 module.exports = router;

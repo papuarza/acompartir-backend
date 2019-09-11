@@ -9,9 +9,13 @@ const orderSchema = new Schema({
     }
   ],
   user: { type: Schema.Types.ObjectId, ref: 'User'},
-  payment: {type: String},
+  payment: {type: String, enum:['Tarjeta Crédito/Débito', 'Paypal', 'Transferencia Bancaria']},
   deliver: {type: String, enum: ['Recogida', 'Entrega']},
-  status: {type: String, enum: ['Pendiente Pago', 'En Preparación', 'En Reparto', 'Entregao', 'Cancelado']}
+  status: {type: String, enum: ['Pendiente Aprobación', 'Transferencia recibida', 'Transferido a almacen', 'Transferido a transporte', 'En espera de recibir transferencia bancaria', 'Entregado', 'Cancelado']},
+  personasBeneficiadas: {type: Number},
+  colectivos: [{type: String}],
+  consumoPropio: {type: Boolean, default: false},
+  reparto: {type: Boolean, default: false},
 }, {
   timestamps: {
     createdAt: 'created_at',

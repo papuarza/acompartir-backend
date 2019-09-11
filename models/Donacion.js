@@ -7,7 +7,7 @@ const donacionSchema = new Schema({
   movil: String,
   email: String,
   monto: Number,
-  entidad: { type: Schema.Types.ObjectId, ref: 'Entidad'},
+  colectivo: { type: String },
   status: {type: String, enum: ['Pendiente de Pago', 'Recibida'], default: 'Pendiente de Pago'}
 }, {
   timestamps: {

@@ -18,7 +18,7 @@ const entitySchema = new Schema({
   },
   logo: {
     type: String,
-    default: 'assets/images/team.svg'
+    default: 'https://res.cloudinary.com/acompartirapp/image/upload/v1568215535/images/ongs/team_tgiowe.png'
   },
   telefono: String,
   movil: String,
@@ -39,6 +39,7 @@ const entitySchema = new Schema({
   colectivos: [{
     type: String
   }],
+  credits: {type: Number, default: 0},
   numeroRegistro: 'String',
   direcciones_envio: [
     {
