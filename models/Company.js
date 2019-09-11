@@ -3,7 +3,8 @@ const Schema   = mongoose.Schema;
 
 const companySchema = new Schema({
   photo: String,
-  name: String
+  name: String,
+  home: {type: Boolean, default: false}
 }, {
   timestamps: {
     createdAt: 'created_at',

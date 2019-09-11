@@ -23,6 +23,19 @@ router.post('/', uploadCloud.single('file'), (req, res, next) => {
   })
 });
 
+router.put('/:id', (req, res, next) => {
+  Company.findById(req.params.id)
+  .then(company => {
+    Company.findByIdAndUpdate(req.params.id, {home: !company.home}, {new: true})
+    .then(updatedCompany => {
+      res.status(200).json(updatedCompany)
+    })
+  })
+  .catch(error => {
+    res.status(500).json(error)
+  })
+});
+
 router.delete('/:id', (req, res, next) => {
   Company.findOneAndRemove({ _id: req.params.id })
     .then(company => res.send({ status: 200, data: 'Ha sido eliminado correctamente' }))
