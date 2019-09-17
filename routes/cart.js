@@ -81,7 +81,10 @@ router.post('/', (req, res, next) => {
             if(productElem.qty + req.body.data.qty > productElem.product.maxCantidad) {
               res.send({ status: 201, data: {message: `El número de productos excede el máximo de ${productElem.product.maxCantidad} productos para esta referencia.`} });
             } else {
-              Cart.findOneAndUpdate({'products.product': {_id: req.body.data.producto._id}}, {$inc: {'products.$.qty': req.body.data.qty}}, {new: true})
+              let incQty = req.body.data.qty;
+              if(req.body.data.type == 'less') incQty = -1;
+              if(req.body.data.type == 'more') incQty = 1;
+              Cart.findOneAndUpdate({'products.product': {_id: req.body.data.producto._id}}, {$inc: {'products.$.qty': incQty}}, {new: true})
               .lean()
               .exec((error, cart) => {
                 res.send({ status: 200, data: {message: `El producto ha sido sumado`} })

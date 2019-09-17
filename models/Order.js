@@ -16,6 +16,12 @@ const orderSchema = new Schema({
   colectivos: [{type: String}],
   consumoPropio: {type: Boolean, default: false},
   reparto: {type: Boolean, default: false},
+  deliverAddress: {
+    principal: String,
+    ciudad: String,
+    provincia: String,
+    codigoPostal: String
+  }
 }, {
   timestamps: {
     createdAt: 'created_at',

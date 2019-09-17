@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const router  = express.Router();
 const Donacion = require('../models/Donacion.js');
+const Entity = require('../models/Entity.js');
 
 router.get('/', (req, res, next) => {
   Donacion.find()
@@ -12,13 +14,33 @@ router.get('/', (req, res, next) => {
 router.post('/', (req, res, next) => {
   const { nombre, apellido, movil, email, monto, colectivo } = req.body.donation;
   const newDonacion = { nombre, apellido, movil, email, monto, colectivo }
-  Donacion.create(newDonacion)
+    Donacion.create(newDonacion)
   .then(donacion => {
-    res.status(200).json(donacion)
-  })
+    let filters = [donacion.colectivo];
+    Entity.find({colectivos: {$all: filters}})
+    .then(entities => {
+      let entityMonto = donacion.monto/entities.length;
+      let entityPromises = [];
+      entities.forEach(entity => {
+        entityPromises.push(
+          new Promise((resolve, reject) => {
+            Entity.findByIdAndUpdate(entity._id, {$inc: {credits: entityMonto}}, {new:true})
+            .then(updatedEntity => {
+              resolve(updatedEntity)
+            })
+          })
+        )
+      })
+      Promise.all(entityPromises)
+      .then(allEntities => {
+        res.status(200).json(donacion)
+      })
+    })
   .catch(error => {
     res.status(500).json(error)
   })
+  });
+  
 });
 
 router.delete('/:id', (req, res, next) => {
