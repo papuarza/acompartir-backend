@@ -54,4 +54,29 @@ router.post('/consulta', (req, res, next) => {
   })
 });
 
+
+router.post('/donacion', (req, res, next) => {
+  let { 
+    nombre = 'No ha especificado', 
+    dni = 'No ha especificado', 
+    email = 'No ha especificado', 
+    certificado = 'No ha especificado',
+    tratamientoDatos = 'No ha especificado',
+    recibirInfo = 'No ha especificado',
+    recibirPubli = 'No ha especificado' } = req.body.data;
+  certificado ? certificado = 'Aceptado' : certificado = 'Rechazado';
+  tratamientoDatos ? tratamientoDatos = 'Aceptado' : tratamientoDatos = 'Rechazado';
+  recibirInfo ? recibirInfo = 'Aceptado' : recibirInfo = 'Rechazado';
+  recibirPubli ? recibirPubli = 'Aceptado' : recibirPubli = 'Rechazado';
+  const data = { seccion: 'Donación', nombre, dni, email, certificado, tratamientoDatos, recibirInfo, recibirPubli}
+  const subject = 'Nuevo mensaje desde DONACIONES de la web de Acompartir';
+  sendGrid.sendDonacion(process.env.ADMIN_EMAIL, process.env.FROM_EMAIL, subject, data)
+  .then(response => {
+    res.status(200).json({status: 200, message: 'Ha sido enviado'})
+  })
+  .catch(error => {
+    res.status(500).json({message: 'Hubo un error'})
+  })
+});
+
 module.exports = router;

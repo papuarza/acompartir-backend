@@ -33,8 +33,25 @@ sendConsulta = (to, from, subject, data) => {
   return sgMail.send(msg);
 }
 
+sendDonacion = (to, from, subject, data) => {
+  const msg = {
+    to,
+    from,
+    subject,
+    html: `
+    <h2>¡Tienes un nuevo mensaje desde la sección de ${data.seccion} de la web!</h2>
+    <b>Nombre y Apellido:</b> ${data.nombre}<br>
+    <b>DNI:</b> ${data.dni}<br>
+    <b>Email:</b> ${data.email}<br>
+    <b>Certificado Desgravación:</b> ${data.certificado}<br>
+    <b>Politica de Privacidad:</b> ${data.tratamientoDatos}<br>
+    <b>Recibir Información:</b> ${data.recibirInfo}<br>
+    <b>Recibir Publicidad:</b> ${data.recibirPubli}<br>`,
+  };
+  return sgMail.send(msg);
+}
+
 sendWelcomeEmail = (from, subject, data) => {
-  console.log(from, subject, data)
   const msg = {
     to: data.to,
     from,
@@ -45,4 +62,4 @@ sendWelcomeEmail = (from, subject, data) => {
 }
 
 
-module.exports = {sendEmail, sendConsulta, sendWelcomeEmail};
+module.exports = {sendEmail, sendConsulta, sendWelcomeEmail, sendDonacion};
