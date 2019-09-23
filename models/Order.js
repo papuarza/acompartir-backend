@@ -11,7 +11,7 @@ const orderSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User'},
   payment: {type: String, enum:['Tarjeta Crédito/Débito', 'Paypal', 'Transferencia Bancaria']},
   deliver: {type: String, enum: ['Recogida', 'Entrega']},
-  status: {type: String, enum: ['Pendiente Aprobación', 'Transferencia recibida', 'Transferido a almacen', 'Transferido a transporte', 'En espera de recibir transferencia bancaria', 'Entregado', 'Cancelado']},
+  status: {type: String, default: 'En espera de recibir transferencia bancaria', enum: ['Pendiente Aprobación', 'Transferencia recibida', 'Transferido a almacen', 'Transferido a transporte', 'En espera de recibir transferencia bancaria', 'Entregado', 'Cancelado']},
   personasBeneficiadas: {type: Number},
   colectivos: [{type: String}],
   consumoPropio: {type: Boolean, default: false},

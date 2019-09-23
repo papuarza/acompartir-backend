@@ -3,6 +3,7 @@ const express = require('express');
 const router  = express.Router();
 const Donacion = require('../models/Donacion.js');
 const Entity = require('../models/Entity.js');
+const sendGrid = require('../config/sendgrid');
 
 router.get('/', (req, res, next) => {
   Donacion.find()
@@ -26,7 +27,10 @@ router.post('/', (req, res, next) => {
           new Promise((resolve, reject) => {
             Entity.findByIdAndUpdate(entity._id, {$inc: {credits: entityMonto}}, {new:true})
             .then(updatedEntity => {
-              resolve(updatedEntity)
+              sendGrid.sendDonationEmail(updatedEntity.email, entityMonto, updatedEntity.nombre, updatedEntity.personaContacto, process.env.FROM_EMAIL)
+              .then(email => {
+                resolve(updatedEntity)
+              })
             })
           })
         )

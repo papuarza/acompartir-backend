@@ -4,6 +4,7 @@ const Product = require('../models/Product.js');
 const User = require('../models/User.js');
 const Cart = require('../models/Cart.js');
 const Order = require('../models/Order.js');
+const sendGrid = require('../config/sendgrid');
 
 checkStock = (products) => products.map(producto => producto.qty <= producto.product.stock ? true : false);
 
@@ -17,6 +18,30 @@ modifyTheStock = (products) => {
   })
   return Promise.all(stockPromises);
 }
+
+removeTheStock = (products) => {
+  let stockPromises = [];
+  products.forEach(producto => {
+    stockPromises.push(new Promise((resolve, reject) => {
+      Product.findByIdAndUpdate(producto.product._id, {$inc: {stock: producto.qty}}, {new: true})
+      .then(updatedProducto => { resolve(updatedProducto)})
+    }))
+  })
+  return Promise.all(stockPromises);
+}
+
+
+router.get('/single/:id', (req, res, next) => {
+    Order.findById(req.params.id)
+    .populate({
+      path: 'user', 
+      populate: { path: 'entity' }
+    })
+    .populate({path: 'products.product'})
+    .then(orders => {
+      res.send({status: 200, orders})
+    })
+});
 
 router.get('/entity/:id', (req, res, next) => {
   User.findOne({entity: req.params.id})
@@ -98,9 +123,26 @@ router.post('/', (req, res, next) => {
           }
           Order.create(newOrder)
           .then(order => {
-            Cart.findByIdAndRemove(id)
-            .then(response => {
-              res.send({status:200, order})
+            Order.findById(order._id)
+            .populate({
+              path: 'user', 
+              populate: { path: 'entity' }
+            })
+            .populate({
+              path: 'products.product'
+            })
+            .lean()
+            .exec((error, theOrder) => {
+              sendGrid.sendNewOrderEmail(process.env.FROM_EMAIL, theOrder.user.username, theOrder)
+              .then(email => {
+                Cart.findByIdAndRemove(id)
+                .then(response => {
+                  res.send({status:200, order})
+                })
+              })
+              .catch(err => {
+                console.log(err)
+              })
             })
           })
         })
@@ -110,5 +152,22 @@ router.post('/', (req, res, next) => {
       }
     })
 });
+
+router.delete('/:id', (req, res, next) => {
+  let { id } = req.body.data;
+  Order.findById(id)
+  .then(order => {
+    removeTheStock(order.products)
+    .then(updatedProducts => {
+      Order.findByIdAndRemove(id)
+      .then(response => {
+        res.send({status: 200, message: 'Se ha eliminado correctamente!'})
+      })
+    })
+  })
+  .catch(error => {
+    console.log(error)
+  })
+})
 
 module.exports = router;

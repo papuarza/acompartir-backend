@@ -1,6 +1,8 @@
 require('dotenv').config();
 const sgMail = require('@sendgrid/mail');
 const template = require('../templates/welcome.js');
+const orderTemplate = require('../templates/order.js');
+const donationTemplate = require('../templates/donation.js');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 sendEmail = (to, from, subject, data) => {
@@ -61,5 +63,32 @@ sendWelcomeEmail = (from, subject, data) => {
   return sgMail.send(msg);
 }
 
+sendNewOrderEmail = (from, to, data) => {
+  const msg = {
+    to,
+    from,
+    subject: 'Nuevo pedido en Acompartir',
+    html: orderTemplate.emailingOrderTemplate(data),
+  };
+  return sgMail.send(msg);
+}
 
-module.exports = {sendEmail, sendConsulta, sendWelcomeEmail, sendDonacion};
+sendDonationEmail = (to, monto, ong, personaContacto, from) => {
+  const msg = {
+    to,
+    from,
+    subject: '¡Has recibido una donación en Acompartir!',
+    html: donationTemplate.emailingDonationTemplate(personaContacto, monto, ong),
+  };
+  return sgMail.send(msg);
+}
+
+
+module.exports = {
+  sendEmail, 
+  sendConsulta,
+  sendWelcomeEmail,
+  sendDonacion,
+  sendNewOrderEmail,
+  sendDonationEmail
+};
