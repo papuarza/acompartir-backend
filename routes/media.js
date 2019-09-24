@@ -4,6 +4,7 @@ const Media = require('../models/Media.js');
 
 router.get('/', (req, res, next) => {
   Media.find()
+  .sort({_id: -1})
     .then(media => res.send({ status: 200, data: media }))
     .catch(error => res.send( { status: 500, error }))
 });
