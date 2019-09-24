@@ -145,5 +145,7 @@ app.use('/api/mail', mailRoutes);
 const orderRoutes = require('./routes/order');
 app.use('/api/order', orderRoutes);
       
+const mediaRoutes = require('./routes/media');
+app.use('/api/media', mediaRoutes);
 
 module.exports = app;
