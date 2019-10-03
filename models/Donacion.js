@@ -8,6 +8,7 @@ const donacionSchema = new Schema({
   email: String,
   monto: Number,
   colectivo: { type: String },
+  entities: [],
   status: {type: String, enum: ['Pendiente de Pago', 'Recibida'], default: 'Pendiente de Pago'}
 }, {
   timestamps: {

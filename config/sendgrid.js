@@ -2,6 +2,7 @@ require('dotenv').config();
 const sgMail = require('@sendgrid/mail');
 const template = require('../templates/welcome.js');
 const orderTemplate = require('../templates/order.js');
+const paypalTemplate = require('../templates/paypal.js');
 const donationTemplate = require('../templates/donation.js');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -73,6 +74,16 @@ sendNewOrderEmail = (from, to, data) => {
   return sgMail.send(msg);
 }
 
+sendPaypalOrderEmail = (from, to, data) => {
+  const msg = {
+    to,
+    from,
+    subject: 'Pago recibido por Paypal',
+    html: paypalTemplate.emailingPaypalTemplate(data),
+  };
+  return sgMail.send(msg);
+}
+
 sendDonationEmail = (to, monto, ong, personaContacto, from) => {
   const msg = {
     to,
@@ -90,5 +101,6 @@ module.exports = {
   sendWelcomeEmail,
   sendDonacion,
   sendNewOrderEmail,
-  sendDonationEmail
+  sendDonationEmail,
+  sendPaypalOrderEmail
 };

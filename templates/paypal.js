@@ -1,11 +1,5 @@
 module.exports = {
-  emailingOrderTemplate: (data) => {
-    let type = '';
-if(data.deliver == 'Entrega') {
-  type = 'Envío'
-} else {
-  type = 'Recogida en almacén'
-}
+  emailingPaypalTemplate: (data) => {
     let emailHTML = `
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -251,57 +245,18 @@ if(data.deliver == 'Entrega') {
   >
     <p align="left">Hola, ${data.user.name}:</p> 
 
-<p align="left">¡Hemos recibido tu pedido en Acompartir! </p>
+    
+<p align="left">PayPal recibido correctamente.</p>
 
-<p align="left">A continuación te detallamos la información del pedido: </p>
-<p align="left"><b>Número de referencia:</b> ${data.ref} </p>
-<p align="left">Cualquier duda, estamos a tu disposición. </p>
+<p align="left">Si ha solicitado la recogida del pedido en el almacén de SEUR puede ir a recogerlo. Recuerde llamar antes para comprobar que esta preparado: 91 205 95 20 </p>
+<p align="left"><b>Número de referencia:</b> ${data._id} </p>
 <br>
-      <p align="left"><u>Detalles del pedido </u></p>
+      <p align="left"><u>La dirección de recogida del almacén es: </u></p>
 
-<p align="left"><b>FORMA DE PAGO:</b>${data.payment}</p> 
-<p align="left"><b>DELIVERY: </b>${type}</p>`
-if (data.deliverAddress) {
-  emailHTML += `<p align="left"><b>DIRECCIÓN DE ENTREGA: </b>${data.deliverAddress.principal}, ${data.deliverAddress.codigoPostal}. ${data.deliverAddress.ciudad}, ${data.deliverAddress.provincia}</p>`
-}
-emailHTML +=  `<br>
-
-<p align="left"><u>RESUMEN DEL PEDIDO</u> </p>
-<table style="width: 100%">
-<tr>
-<th align="left">Nombre</th>
-<th align="left">Cantidad</th>
-<th align="left">Participación</th>
-<th align="left">Total</th>
-</tr>`
-let sumPrice = 0;
-for(i=0; i<data.products.length; i++) {
-  sumPrice += data.products[i].product.precioAcompartir * data.products[i].qty;
-  emailHTML += `<tr height: 25px;">
-  <td align="left">${data.products[i].product.titulo}</td>
-  <td align="left">${data.products[i].qty}</td>
-  <td align="left">${data.products[i].product.precioAcompartir}€</td>
-  <td align="left">${data.products[i].product.precioAcompartir * data.products[i].qty}€</td>
-  </tr>`
-}
-emailHTML += `</table>
-<br>
-<p align="left"><b>Total de la participación solidaria: </b>${sumPrice}€</p>
-<br>
-<p align="left"><u>DETALLES DE LA CUENTA:</u> </p>
-<p align="left">Fundación ACOMPARTIR </p>
-<p align="left">La Caixa ES13 2100 9605 7002 0012 7795</p>
-<br>
-<p align="left">
-Si ha marcado la opción RECOGIDA EN ALMACÉN por favor llame a Atención al Cliente de SEUR ( 91 205 95 20) antes de recoger su pedido para asegurarse de que está preparado (indicar que es un pedido de ACOMPARTIR + numero de pedido). 
-</p>
-<p align="left"><u>DIRECCIÓN DEL ALMACÉN:</u></p>
 <p align="left">Almacén de SEUR </p>
 <p align="left">C/ Juan Huarte de San Juan </p>
 <p align="left">Poligono Industrial Inbisa II </p>
 <p align="left">28806 Alcalá de Henares (Madrid) </p>
-<br>
-<p align="left">Si ha marcado la opción de ENVÍO A SU CENTRO llame a Atención al Cliente de SEUR (91 205 95 20) para que le confirmen horario de entrega.</p>
 <br>
 <p align="left">¡Cualquier consulta que tenga sobre el pedido, comúniquese con nosotros! </p>
 <br>

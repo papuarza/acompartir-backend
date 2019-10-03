@@ -11,11 +11,17 @@ router.get('/', (req, res, next) => {
     .catch(error => res.send( { status: 500, error }))
 });
 
+router.get('/:id', (req, res, next) => {
+  Donacion.findById(req.params.id)
+    .then(donacion => res.send({ status: 200, data: donacion}))
+    .catch(error => res.send( { status: 500, error }))
+});
+
 
 router.post('/', (req, res, next) => {
   const { nombre, apellido, movil, email, monto, colectivo } = req.body.donation;
   const newDonacion = { nombre, apellido, movil, email, monto, colectivo }
-    Donacion.create(newDonacion)
+  Donacion.create(newDonacion)
   .then(donacion => {
     let filters = [donacion.colectivo];
     Entity.find({colectivos: {$all: filters}})
@@ -37,7 +43,10 @@ router.post('/', (req, res, next) => {
       })
       Promise.all(entityPromises)
       .then(allEntities => {
-        res.status(200).json(donacion)
+        Donacion.findByIdAndUpdate(donacion._id, {entities: allEntities})
+        .then(donationNew => {
+          res.status(200).json(donacion)
+        })
       })
     })
   .catch(error => {

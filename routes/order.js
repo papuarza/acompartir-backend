@@ -121,6 +121,15 @@ router.post('/', (req, res, next) => {
               codigoPostal: cart.user.entity.direccion.codigoPostal,
             }
           }
+          Order.find()
+          .sort({ ref: -1 })
+          .limit(1)
+          .lean()
+          .exec((err, model) => { 
+            let newRef = 3001;
+            if(model.length > 0) { newRef = model[0].ref + 1;}
+            newOrder['ref'] = newRef;
+          
           Order.create(newOrder)
           .then(order => {
             Order.findById(order._id)
@@ -135,16 +144,27 @@ router.post('/', (req, res, next) => {
             .exec((error, theOrder) => {
               sendGrid.sendNewOrderEmail(process.env.FROM_EMAIL, theOrder.user.username, theOrder)
               .then(email => {
-                Cart.findByIdAndRemove(id)
-                .then(response => {
-                  res.send({status:200, order})
-                })
+                if(paymentMethod == 'Paypal') {
+                  sendGrid.sendPaypalOrderEmail(process.env.FROM_EMAIL, theOrder.user.username, theOrder)
+                  .then(email => {
+                    Cart.findByIdAndRemove(id)
+                    .then(response => {
+                      res.send({status:200, order})
+                    })
+                  })
+                } else {
+                  Cart.findByIdAndRemove(id)
+                  .then(response => {
+                    res.send({status:200, order})
+                  })
+                }
               })
               .catch(err => {
                 console.log(err)
               })
             })
           })
+        })
         })
         .catch(error => {
           console.log(error)

@@ -51,7 +51,9 @@ const products = [
 
 const productsProcesados = products.map(product => {
   product.totalCantidad = product.stock * product.unidadesPorCaja;
-  product.precioOriginalTotal = product.precioOriginal * product.unidadesPorCaja;
+  product.precioOriginalTotal = parseFloat(product.precioOriginal * product.unidadesPorCaja).toFixed(2);
+  product.precioAcompartir = parseFloat(product.precioAcompartir).toFixed(2);
+  product.precioOriginal = parseFloat(product.precioOriginal).toFixed(2);
   return product;
 })
 

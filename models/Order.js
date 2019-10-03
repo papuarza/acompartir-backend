@@ -21,7 +21,8 @@ const orderSchema = new Schema({
     ciudad: String,
     provincia: String,
     codigoPostal: String
-  }
+  },
+  ref: Number
 }, {
   timestamps: {
     createdAt: 'created_at',
