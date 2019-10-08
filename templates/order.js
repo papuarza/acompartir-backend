@@ -1,6 +1,8 @@
 module.exports = {
   emailingOrderTemplate: (data) => {
     let type = '';
+    let pesoTotal = 0;
+    let paletsTotal = 0;
 if(data.deliver == 'Entrega') {
   type = 'Envío'
 } else {
