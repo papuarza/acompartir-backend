@@ -44,7 +44,8 @@ router.post('/', (req, res, next) => {
   } = req.body.product;
   const totalCantidad = stock * unidadesPorCaja;
   const precioOriginalTotal = precioOriginal * unidadesPorCaja;
-  const precioAcompartir = Math.round(precioOriginal * (porcentajeAcompartir/100));
+  let precioAcompartir = precioOriginalTotal * (porcentajeAcompartir/100);
+  precioAcompartir = precioAcompartir.toFixed(2);
   const nuevoProducto = {
     titulo, 
     descripcionCorta, 
@@ -102,7 +103,8 @@ router.put('/:ref', (req, res, next) => {
   } = req.body.product;
   const totalCantidad = stock * unidadesPorCaja;
   const precioOriginalTotal = precioOriginal * unidadesPorCaja;
-  const precioAcompartir = Math.round(precioOriginal * (porcentajeAcompartir/100));
+  let precioAcompartir = precioOriginalTotal * (porcentajeAcompartir/100);
+  precioAcompartir = precioAcompartir.toFixed(2);
   const nuevoProducto = {
     titulo, 
     descripcionCorta, 

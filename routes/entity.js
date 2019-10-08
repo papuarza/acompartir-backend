@@ -145,6 +145,15 @@ router.put('/:ref', (req, res, next) => {
     provincia: req.body.entity.provincia,
     codigoPostal: req.body.entity.codigoPostal
   }
+  let direccionFacturacion = direccion;
+  if(req.body.entity.facturacion) {
+    direccionFacturacion = {
+      principal: req.body.entity.facturacion.principal,
+      ciudad: req.body.entity.facturacion.ciudad,
+      provincia: req.body.entity.facturacion.provincia,
+      codigoPostal: req.body.entity.facturacion.codigoPostal
+    }
+  }
   const nuevaEntidad = {
     nombre,
     cif,
@@ -163,7 +172,7 @@ router.put('/:ref', (req, res, next) => {
     actividadCentro,
     numeroRegistro,
     direccion,
-    direccion_facturacion: direccion,
+    direccion_facturacion: direccionFacturacion,
     direcciones_envio: [direccion]
   }
   Entity.findOne({ ref: req.params.ref })
