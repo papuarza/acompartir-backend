@@ -26,6 +26,7 @@ router.get('/:ref', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   const {
+    ref,
     titulo, 
     descripcionCorta, 
     descripcion, 
@@ -47,6 +48,7 @@ router.post('/', (req, res, next) => {
   let precioAcompartir = precioOriginalTotal * (porcentajeAcompartir/100);
   precioAcompartir = precioAcompartir.toFixed(2);
   const nuevoProducto = {
+    ref,
     titulo, 
     descripcionCorta, 
     descripcion, 
@@ -71,9 +73,6 @@ router.post('/', (req, res, next) => {
   .limit(1)
   .lean()
   .exec((err, model) => { 
-    let newRef = 1;
-    if(model.length > 0) { newRef = model[0].ref + 1;}
-    nuevoProducto['ref'] = newRef;
     Product.create(nuevoProducto)
     .then(product => {
       res.send({ status: 200, data: product })
@@ -83,8 +82,9 @@ router.post('/', (req, res, next) => {
   
 });
 
-router.put('/:ref', (req, res, next) => {
+router.put('/:id', (req, res, next) => {
   const {
+    ref,
     titulo, 
     descripcionCorta, 
     descripcion, 
@@ -106,6 +106,7 @@ router.put('/:ref', (req, res, next) => {
   let precioAcompartir = precioOriginalTotal * (porcentajeAcompartir/100);
   precioAcompartir = precioAcompartir.toFixed(2);
   const nuevoProducto = {
+    ref,
     titulo, 
     descripcionCorta, 
     descripcion, 
@@ -125,7 +126,7 @@ router.put('/:ref', (req, res, next) => {
     cajasPorPalet,
     showCompany
   }
-  Product.findOneAndUpdate({ ref: req.params.ref }, nuevoProducto, { new: true })
+  Product.findOneAndUpdate({ _id: req.params.id }, nuevoProducto, { new: true })
     .then(product => res.send({ status: 200, data: product }))
     .catch(error => res.send( { status: 500, error }))
 });
