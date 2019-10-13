@@ -11,8 +11,9 @@ const sendGrid = require('../config/sendgrid');
 
 router.get('/', (req, res, next) => {
   Entity.find()
-    .then(entities => res.send({ status: 200, data: entities }))
-    .catch(error => res.send( { status: 500, error }))
+  .sort({ref: 1})
+  .then(entities => res.send({ status: 200, data: entities }))
+  .catch(error => res.send( { status: 500, error }))
 });
 
 router.get('/:ref', (req, res, next) => {
