@@ -147,6 +147,7 @@ router.delete('/:ref', (req, res, next) => {
 });
 
 router.post('/foto', uploadCloud.single('file'), (req, res, next) => {
+  console.log(req.body.ref, req.body, req.file)
   Product.findOneAndUpdate({ref: req.body.ref}, {foto: req.file.url}, {new: true})
   .then(producto => {
     res.status(200).json(producto)
