@@ -21,11 +21,13 @@ router.get('/:id', (req, res, next) => {
 router.post('/', (req, res, next) => {
   const { nombre, apellido, movil, email, monto, colectivo } = req.body.donation;
   const newDonacion = { nombre, apellido, movil, email, monto, colectivo }
+  console.log(newDonacion)
   Donacion.create(newDonacion)
   .then(donacion => {
     let filters = [donacion.colectivo];
     Entity.find({colectivos: {$all: filters}})
     .then(entities => {
+      console.log(entities)
       let entityMonto = donacion.monto/entities.length;
       let entityPromises = [];
       entities.forEach(entity => {
