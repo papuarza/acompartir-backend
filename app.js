@@ -24,7 +24,7 @@ mongoose
     console.error('Error connecting to mongo', err)
   });
 
-  var whitelist = ['http://localhost:4200', 'http://papuarza.github.io', 'https://papuarza.github.io']
+  var whitelist = ['http://localhost:4200', 'http://papuarza.github.io', 'https://papuarza.github.io', 'https://www.acompartir.es', 'http://www.acompartir.es']
   var corsOptions = {
     origin: function(origin, callback){
         var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
