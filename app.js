@@ -150,7 +150,7 @@ const mediaRoutes = require('./routes/media');
 app.use('/api/media', mediaRoutes);
 
 app.all('/*', function (req, res) {
-  res.sendfile(__dirname + '/public/index.html');
+  res.sendFile(__dirname + '/public/index.html');
 });
 
 module.exports = app;
