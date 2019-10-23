@@ -19,13 +19,17 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/user', (req, res, next) => {
-  Cart.findOne({user: req.user._id})
-  .populate('user')
-  .populate({path: 'products.product'})
-    .then(cart => {
-      res.send({ status: 200, data: cart })
-    })
-    .catch(error => res.send( { status: 500, error }))
+  if(req.user) {
+    Cart.findOne({user: req.user._id})
+    .populate('user')
+    .populate({path: 'products.product'})
+      .then(cart => {
+        res.send({ status: 200, data: cart })
+      })
+      .catch(error => res.send( { status: 500, error }))
+  } else {
+    res.send({ status: 200, data: {} })
+  }
 });
 
 router.get('/:id', (req, res, next) => {
