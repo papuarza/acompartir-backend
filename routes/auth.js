@@ -86,7 +86,7 @@ authRoutes.get('/loggedin', (req, res) => {
     })
     .catch(e => res.status(500).json({message:e.message}));   
   }else{
-      return res.status(200).json({message:"You should loggin first"});
+      return res.status(400).json({message:"You should loggin first"});
   }
 });
 
