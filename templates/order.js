@@ -256,7 +256,7 @@ if(data.deliver == 'Entrega') {
 <p align="left">¡Hemos recibido tu pedido en Acompartir! </p>
 
 <p align="left">A continuación te detallamos la información del pedido: </p>
-<p align="left"><b>Número de referencia:</b> ${data.ref} </p>
+<p align="left"><b>Número de pedido:</b> ${data.ref} </p>
 <p align="left">Cualquier duda, estamos a tu disposición. </p>
 <br>
       <p align="left"><u>Detalles del pedido </u></p>
@@ -289,6 +289,8 @@ for(i=0; i<data.products.length; i++) {
 emailHTML += `</table>
 <br>
 <p align="left"><b>Total de la participación solidaria: </b>${sumPrice}€</p>
+<p align="left"><b>Total de palets: </b>${sumPrice}€</p>
+<p align="left"><b>Peso total: </b>${sumPrice}€</p>
 <br>
 <p align="left"><u>DETALLES DE LA CUENTA:</u> </p>
 <p align="left">Fundación ACOMPARTIR </p>

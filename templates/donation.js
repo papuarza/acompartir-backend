@@ -243,11 +243,11 @@ module.exports = {
   <div
      style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:center;color:#555;"
   >
-    <p align="left">Hola, ${personaContacto}:</p> 
+    <p align="left">Hola, ${ong}:</p> 
     <br>
 <p align="left">¡Has recibido una nueva donación en la cuenta de ${ong}! </p>
 <br>
-<p align="left">La donación es de: <b>${monto}€</b>. Automáticamente se te depositará como crédito para tu próxima compra. </p>
+<p align="left">La donación es de: <b>${monto}€</b>. Automáticamente se te depositará como crédito para tu próximo pedido. </p>
 <br>
 <p align="left">Cualquier duda, estamos a tu disposición. </p>
 <br>
