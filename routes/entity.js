@@ -72,7 +72,7 @@ router.post('/', (req, res, next) => {
   }
   //CREAR USUARIO FIRST!
   const username  = email;
-  const password = 'ayudamos';
+  const password = req.body.entity.password;
   const role = 'client';
   const name = personaContacto;
   if (username === "" || password === "") {

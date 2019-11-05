@@ -64,12 +64,12 @@ sendWelcomeEmail = (from, subject, data) => {
   return sgMail.send(msg);
 }
 
-sendNewOrderEmail = (from, to, data) => {
+sendNewOrderEmail = (from, to, data, kilos, palets) => {
   const msg = {
     to,
     from,
     subject: 'Nuevo pedido en Acompartir',
-    html: orderTemplate.emailingOrderTemplate(data),
+    html: orderTemplate.emailingOrderTemplate(data, kilos, palets),
   };
   return sgMail.send(msg);
 }

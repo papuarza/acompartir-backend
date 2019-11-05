@@ -1,5 +1,5 @@
 module.exports = {
-  emailingOrderTemplate: (data) => {
+  emailingOrderTemplate: (data, kilos, palets) => {
     let type = '';
     let pesoTotal = 0;
     let paletsTotal = 0;
@@ -289,8 +289,8 @@ for(i=0; i<data.products.length; i++) {
 emailHTML += `</table>
 <br>
 <p align="left"><b>Total de la participación solidaria: </b>${sumPrice}€</p>
-<p align="left"><b>Total de palets: </b>${sumPrice}€</p>
-<p align="left"><b>Peso total: </b>${sumPrice}€</p>
+<p align="left"><b>Total de palets: </b>${palets}</p>
+<p align="left"><b>Peso total: </b>${kilos} Kgs.</p>
 <br>
 <p align="left"><u>DETALLES DE LA CUENTA:</u> </p>
 <p align="left">Fundación ACOMPARTIR </p>

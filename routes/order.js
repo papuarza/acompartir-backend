@@ -142,7 +142,16 @@ router.post('/', (req, res, next) => {
             })
             .lean()
             .exec((error, theOrder) => {
-              sendGrid.sendNewOrderEmail(process.env.FROM_EMAIL, theOrder.user.username, theOrder)
+              let productosKilosTotal = 0;
+              let totalPalets = 0;
+              theOrder.products.forEach(producto => {
+                totalPalets += producto.qty/producto.product.cajasPorPalet;
+                productosKilosTotal += producto.product.pesoPorCaja * producto.qty;
+              })
+              productosKilosTotal = productosKilosTotal.toFixed(2);
+              totalPalets = Math.round(totalPalets);
+              if(totalPalets < 1) { totalPalets = 0.5;}
+              sendGrid.sendNewOrderEmail(process.env.FROM_EMAIL, theOrder.user.username, theOrder, productosKilosTotal, totalPalets)
               .then(email => {
                 if(paymentMethod == 'Paypal') {
                   sendGrid.sendPaypalOrderEmail(process.env.FROM_EMAIL, theOrder.user.username, theOrder)
